@@ -3,8 +3,8 @@
 const C={bg:'#0B0D0E',field:'#F2F0E9',grid:'#7C8888',teal:'#21C7B7',contact:'#4B83A6',tunnel:'#D59345',red:'#D94B4B',neutral:'#3E484B'};
 const $=id=>document.getElementById(id),canvas=$('courseCanvas'),ctx=canvas.getContext('2d'),wrap=$('canvasWrap'),workspace=$('workspace'),empty=$('emptyHint');
 const dpr=Math.max(1,Math.min(2,devicePixelRatio||1));
-const names={jump:'Jump',redjump:'Snooker red',double:'Double jump',triple:'Triple jump',wall:'Wall',tire:'Tire',longjump:'Long jump',weaves:'Weave poles',dogwalk:'Dog walk',aframe:'A-frame',teeter:'Teeter',tunnel:'Tunnel',table:'Table',arrow:'Direction arrow',startfinish:'Start / Finish'};
-const defs={jump:{w:3,h:.28},redjump:{w:3,h:.28},double:{w:3,h:.65},triple:{w:3,h:1},wall:{w:3,h:.42},tire:{w:2,h:.55},longjump:{w:1.2,h:3.5},weaves:{w:.45,h:7.2},dogwalk:{w:1,h:11},aframe:{w:2.2,h:5.6},teeter:{w:1,h:4},tunnel:{w:5,h:1,curve:.35},table:{w:1.2,h:1.2},arrow:{w:3.2,h:.9},startfinish:{w:4.2,h:1.2}};
+const names={jump:'Jump',redjump:'Snooker red',double:'Double jump',triple:'Triple jump',wall:'Wall',tire:'Tire',longjump:'Long jump',weaves:'Weave poles',dogwalk:'Dog walk',aframe:'A-frame',teeter:'Teeter',tunnel:'Tunnel',table:'Table',arrow:'Direction arrow',start:'Start',finish:'Finish',startfinish:'Start / Finish'};
+const defs={jump:{w:3,h:.28},redjump:{w:3,h:.28},double:{w:3,h:.65},triple:{w:3,h:1},wall:{w:3,h:.42},tire:{w:2,h:.55},longjump:{w:1.2,h:3.5},weaves:{w:.45,h:7.2},dogwalk:{w:1,h:11},aframe:{w:2.2,h:5.6},teeter:{w:1,h:4},tunnel:{w:5,h:1,curve:.35},table:{w:1.2,h:1.2},arrow:{w:3.2,h:.9},start:{w:1.4,h:1.4},finish:{w:1.4,h:1.4},startfinish:{w:4.2,h:1.2}};
 const S={field:{w:20,h:40,unit:'m',showGrid:true,showAxes:false,snap:false,grid:2},items:[],annotations:[],title:'Untitled Course',selected:null,selectedKind:null,tool:'select',zoom:1,pan:{x:0,y:0},autoNumber:false,nextNumber:1,exportFormat:'png',exportGrid:false,exportTitle:true,background:{src:null,opacity:.35},backgroundImage:null,drag:null,drawing:null,pointers:new Map(),pinch:null,undo:[],redo:[],restoring:false};
 let V={left:0,top:0,width:0,height:0,scale:1},installPrompt=null;
 
@@ -48,6 +48,8 @@ function item(c,i,sel){
   else if(i.type==='tunnel')standardTunnel(c,w,i.curve??.35);
   else if(i.type==='table')standardTable(c,w,h);
   else if(i.type==='arrow')standardArrow(c,w,h);
+  else if(i.type==='start')standardMarker(c,w,h,'S');
+  else if(i.type==='finish')standardMarker(c,w,h,'F');
   else if(i.type==='startfinish')standardStartFinish(c,w,h);
   c.restore();
   if(i.num){
@@ -130,6 +132,13 @@ function standardArrow(c,w,h){
   c.strokeStyle=ink;c.fillStyle=ink;c.lineWidth=shaft;c.lineCap='round';c.lineJoin='round';
   c.beginPath();c.moveTo(-w/2,0);c.lineTo(w/2-head*.65,0);c.stroke();
   c.beginPath();c.moveTo(w/2,0);c.lineTo(w/2-head,head*.65);c.lineTo(w/2-head,-head*.65);c.closePath();c.fill();
+}
+function standardMarker(c,w,h,label){
+  const ink='#1D2425',r=Math.max(10,Math.min(26,Math.min(w,h)*.42));
+  c.strokeStyle=ink;c.fillStyle=C.field;c.lineWidth=Math.max(1.8,Math.min(3,r*.12));
+  c.beginPath();c.arc(0,0,r,0,Math.PI*2);c.fill();c.stroke();
+  c.fillStyle=ink;c.font='700 '+Math.max(12,Math.min(26,r*1.08))+'px Inter,sans-serif';c.textAlign='center';c.textBaseline='middle';
+  c.fillText(label,0,1);
 }
 function standardStartFinish(c,w,h){
   const ink='#1D2425',r=Math.max(10,Math.min(24,h*.42)),x=Math.max(r+6,w/2-r-3);

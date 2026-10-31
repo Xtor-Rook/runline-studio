@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#0B0D0E" />
+  <title>Runline Studio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div class="brand" aria-label="Runline Studio">
+        <div class="brand-runline">RUNLINE</div>
+        <div class="brand-studio">STUDIO</div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="undoBtn" title="Undo" aria-label="Undo">↶</button>
+        <button class="icon-btn" id="redoBtn" title="Redo" aria-label="Redo">↷</button>
+        <button class="icon-btn" id="focusBtn" title="Focus mode" aria-label="Focus mode">⛶</button>
+        <button class="primary-btn" id="saveBtn">Save</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="panel left-panel">
+        <section class="panel-section">
+          <div class="section-title">FIELD</div>
+          <div class="field-row two-col">
+            <label>Width<input id="fieldWidth" type="number" min="5" max="100" step="1" value="20"></label>
+            <label>Length<input id="fieldHeight" type="number" min="5" max="120" step="1" value="40"></label>
+          </div>
+          <div class="segmented" id="unitControl">
+            <button class="seg active" data-unit="m">METRES</button>
+            <button class="seg" data-unit="ft">FEET</button>
+          </div>
+          <label class="toggle-line"><span>Show grid</span><input id="gridToggle" type="checkbox" checked><span class="switch"></span></label>
+          <label class="toggle-line"><span>Snap to grid</span><input id="snapToggle" type="checkbox"><span class="switch"></span></label>
+          <label class="small-label">Grid spacing
+            <select id="gridSpacing">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="5">5</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-title">OBSTACLES</div>
+          <div class="palette-grid" id="obstaclePalette">
+            <button data-type="jump"><span class="swatch jump"></span>Jump</button>
+            <button data-type="redjump"><span class="swatch red"></span>Snooker red</button>
+            <button data-type="double"><span class="swatch jump"></span>Double</button>
+            <button data-type="triple"><span class="swatch jump"></span>Triple</button>
+            <button data-type="wall"><span class="swatch jump"></span>Wall</button>
+            <button data-type="tire"><span class="swatch jump"></span>Tire</button>
+            <button data-type="longjump"><span class="swatch jump"></span>Long jump</button>
+            <button data-type="weaves"><span class="swatch neutral"></span>Weaves</button>
+            <button data-type="dogwalk"><span class="swatch contact"></span>Dog walk</button>
+            <button data-type="aframe"><span class="swatch contact"></span>A-frame</button>
+            <button data-type="teeter"><span class="swatch contact"></span>Teeter</button>
+            <button data-type="tunnel"><span class="swatch tunnel"></span>Tunnel</button>
+            <button data-type="table"><span class="swatch neutral"></span>Table</button>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-title">ANNOTATE</div>
+          <div class="tool-row">
+            <button class="tool-btn" id="lineToolBtn">Gamble line</button>
+            <button class="tool-btn" id="selectToolBtn">Select</button>
+          </div>
+          <p class="hint">Gamble line: drag on the field. Select: move obstacles and lines.</p>
+        </section>
+      </aside>
+
+      <section class="canvas-stage" id="canvasStage">
+        <div class="course-toolbar">
+          <input id="courseTitle" class="course-title-input" value="Untitled Course" aria-label="Course title" />
+          <div class="zoom-tools">
+            <button id="zoomOutBtn" class="mini-btn">−</button>
+            <span id="zoomLabel">100%</span>
+            <button id="zoomInBtn" class="mini-btn">+</button>
+            <button id="fitBtn" class="mini-btn">Fit</button>
+          </div>
+        </div>
+        <div class="canvas-wrap" id="canvasWrap">
+          <canvas id="courseCanvas"></canvas>
+          <div class="canvas-empty" id="emptyHint">
+            <strong>BUILD THE LINE.</strong>
+            <span>Choose an obstacle to start.</span>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel right-panel">
+        <section class="panel-section selected-editor" id="selectedEditor">
+          <div class="section-title">SELECTED</div>
+          <div id="noSelection" class="empty-state">Tap an obstacle or annotation to edit it.</div>
+          <div id="selectionControls" hidden>
+            <div class="selection-name" id="selectionName">Jump</div>
+            <label class="small-label">Rotation <span id="rotationValue">0°</span>
+              <input id="rotationSlider" type="range" min="0" max="359" value="0" step="1">
+            </label>
+            <div id="tunnelControls" hidden>
+              <label class="small-label">Tunnel length <span id="tunnelLengthValue">5.0</span>
+                <input id="tunnelLengthSlider" type="range" min="2" max="8" value="5" step="0.25">
+              </label>
+              <label class="small-label">Curvature <span id="tunnelCurveValue">35%</span>
+                <input id="tunnelCurveSlider" type="range" min="-100" max="100" value="35" step="1">
+              </label>
+            </div>
+            <div id="numberControls">
+              <div class="field-row two-col">
+                <label>Number<input id="numberInput" type="number" min="1" max="99" placeholder="—"></label>
+                <label>Suffix
+                  <select id="suffixSelect">
+                    <option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option>
+                  </select>
+                </label>
+              </div>
+              <label class="toggle-line"><span>Auto-number new</span><input id="autoNumberToggle" type="checkbox"><span class="switch"></span></label>
+            </div>
+            <div class="edit-actions">
+              <button id="duplicateBtn" class="tool-btn">Duplicate</button>
+              <button id="deleteBtn" class="danger-btn">Delete</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-title">COURSES</div>
+          <div class="save-row">
+            <select id="savedCourses"></select>
+            <button id="loadBtn" class="tool-btn">Load</button>
+          </div>
+          <button id="newCourseBtn" class="tool-btn full">New blank course</button>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-title">EXPORT</div>
+          <div class="segmented" id="exportFormatControl">
+            <button class="seg active" data-format="png">PNG</button>
+            <button class="seg" data-format="jpg">JPG</button>
+          </div>
+          <label class="toggle-line"><span>Include grid</span><input id="exportGridToggle" type="checkbox"><span class="switch"></span></label>
+          <label class="toggle-line"><span>Include title</span><input id="exportTitleToggle" type="checkbox" checked><span class="switch"></span></label>
+          <button id="exportBtn" class="primary-btn full">Export image</button>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="mobile-tray">
+      <button data-type="jump">Jump</button>
+      <button data-type="tunnel">Tunnel</button>
+      <button data-type="dogwalk">Dog walk</button>
+      <button data-type="weaves">Weaves</button>
+      <button id="mobileMoreBtn">Tools</button>
+      <button id="mobileEditBtn">Edit</button>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>

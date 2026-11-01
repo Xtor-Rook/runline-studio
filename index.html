@@ -160,16 +160,24 @@
               </div>
 
               <div id="numberControls">
-                <div class="field-row two-col">
-                  <label>Number<input id="numberInput" type="number" min="1" max="99" placeholder="—"></label>
-                  <label>Suffix
-                    <select id="suffixSelect">
-                      <option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option>
-                    </select>
-                  </label>
+                <div class="small-label">Course numbers</div>
+                <div id="numberList" class="number-list"></div>
+                <button id="addNumberBtn" class="tool-btn full">+ Add number</button>
+                <div id="numberEditor" hidden>
+                  <div class="field-row two-col">
+                    <label>Number<input id="numberInput" type="number" min="1" max="99" placeholder="—"></label>
+                    <label>Suffix
+                      <select id="suffixSelect">
+                        <option value="">—</option><option>a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="edit-actions">
+                    <button id="resetNumberPosBtn" class="ghost-btn">Reset position</button>
+                    <button id="deleteNumberBtn" class="danger-btn">Delete number</button>
+                  </div>
                 </div>
                 <label class="toggle-line"><span>Auto-number new</span><input id="autoNumberToggle" type="checkbox"><span class="switch"></span></label>
-                <button id="resetNumberPosBtn" class="ghost-btn full">Reset number position</button>
               </div>
             </div>
 

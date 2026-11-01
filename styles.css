@@ -63,6 +63,9 @@ input:focus,select:focus,.course-title-input:focus{border-color:var(--teal)}
 .palette-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .palette-grid button{min-height:44px;text-align:left;padding:7px 9px;font-size:11px;background:#171c1e;color:#d8dedd;display:flex;align-items:center;gap:8px}
 .swatch{width:8px;height:24px;border-radius:5px;background:var(--neutral);display:inline-block}.swatch.jump{background:var(--teal)}.swatch.contact{background:var(--contact)}.swatch.tunnel{background:var(--tunnel)}.swatch.red{background:var(--red)}
+.symbol-preview{width:24px;height:24px;display:inline-grid;place-items:center;flex:0 0 24px;color:#cbd3d2;font-weight:800;line-height:1}
+.arrow-preview{font-size:22px}
+.marker-preview{border:1.5px solid #778284;border-radius:50%;font-size:11px}
 .tool-row,.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .tool-btn,.ghost-btn,.danger-btn{padding:0 11px;background:#1b2123;font-size:12px}
 .tool-btn.active{border-color:var(--teal);color:var(--teal)}
